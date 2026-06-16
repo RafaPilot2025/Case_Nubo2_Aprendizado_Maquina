@@ -1,0 +1,8 @@
+﻿Abordagem,P@1,MRR@5,R@5,Tempo (250 q),Custo,Complexidade
+Claude few-shot,0.992,0.9953,1.0,"13,6 min","~US$ 0,30 / 250 q",Alta
+Claude zero-shot,0.992,0.9953,1.0,"18,5 min","~US$ 0,25 / 250 q",Alta
+TF-IDF char,0.984,0.9903,1.0,"1,3 s",Gratuito,Baixa
+Gemini few-shot,0.98,0.99,1.0,"1,9 min",Gratuito (20 req/dia),Alta
+BM25,0.976,0.988,1.0,"4,6 s",Gratuito,Baixa
+Gemini zero-shot,0.968,0.9833,1.0,"1,8 min",Gratuito (20 req/dia),Alta
+Embeddings E5,0.952,0.9737,1.0,57 s,Gratuito (CPU local),Média

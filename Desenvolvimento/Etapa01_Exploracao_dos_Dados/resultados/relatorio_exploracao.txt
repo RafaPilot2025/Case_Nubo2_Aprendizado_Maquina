@@ -1,0 +1,244 @@
+======================================================================
+1. VISÃO GERAL
+======================================================================
+catalog: 14206 linhas x 3 colunas | nulos por coluna: {'product_id': 0, 'product_name': 0, 'brand_name': 0}
+queries: 16441 linhas x 2 colunas | nulos por coluna: {'text': 0, 'matched_id': 16441}
+val: 250 linhas x 2 colunas | nulos por coluna: {'text': 0, 'matched_id': 0}
+
+catalog: product_id únicos: 14206
+catalog: product_name únicos: 14176
+catalog: product_name duplicados (mesmo nome, ids diferentes): 30
+exemplos de nomes duplicados:
+   'Adoçante líquido sucralose linea 75ml' -> ids: ['07896001250628', '07896001250611']
+   'Bebida de aveia orgânica sem glúten nude 1 litro' -> ids: ['07898994939726', '07898994939764']
+   'Bife de contrafilé bovino novilho jovem zaffari' -> ids: ['02079620000002', '02112110000004']
+   'Bolinho de aipim zaffari' -> ids: ['02398400000002', '02182170000009']
+   'Café torrado em grãos rituais mogiana paulista 3 corações 250g' -> ids: ['07896005806661', '07896005807743']
+
+queries: textos únicos: 14753 | duplicadas: 1688
+queries duplicadas mais comuns:
+   20x 'Café Torrado e Moído Tradicional Melitta Caixa 500g'
+   17x 'Café Torrado e Moído Extraforte Melitta Caixa 500g'
+   15x 'Refrigerante Guaraná ANTARCTICA Garrafa 2L'
+   14x 'Gran Angus Burger SEARA Gourmet Caixa 400g'
+   13x 'Cerveja Pilsner Duplo Malte Brahma Lata 350ml'
+
+sobreposição de textos: queries ∩ val: 29
+
+======================================================================
+2. ANOTAÇÕES (val) × CATÁLOGO — há NO_MATCH?
+======================================================================
+val: 250/250 matched_id existem no catálogo
+
+======================================================================
+3. COMPRIMENTO DOS TEXTOS
+======================================================================
+queries.text       : chars: média=47.4 mediana=44 min=4 max=160 | tokens: média=7.4 mediana=7 min=1 max=28
+catalog.product_name: chars: média=47.1 mediana=46 min=4 max=116 | tokens: média=7.3 mediana=7 min=1 max=20
+
+======================================================================
+4. MARCAS NO CATÁLOGO
+======================================================================
+marcas únicas: 1833
+top 20 marcas por nº de produtos:
+     274  Marchand
+     207  Hortifruti
+     157  Nestlé
+     154  Zaffari
+     130  Nivea
+     112  Mercatto
+     109  Tramontina
+      92  Dove
+      90  Sadia
+      86  Santa clara
+      86  Seara
+      83  Dr.oetker
+      73  3 corações
+      70  Batavo
+      68  Dacolônia
+      61  Mor
+      61  Sorvelândia
+      59  Nescafé
+      59  Colgate
+      58  Rexona
+
+======================================================================
+5. CATEGORIAS DE PRODUTO (1ª palavra do product_name como proxy)
+======================================================================
+categorias distintas (proxy): 1236
+top 25 categorias:
+     347  conjunto
+     338  biscoito
+     330  chocolate
+     281  iogurte
+     261  queijo
+     221  massa
+     218  sabonete
+     209  creme
+     204  pão
+     197  cerveja
+     183  shampoo
+     172  ração
+     168  chá
+     163  bebida
+     158  café
+     154  desodorante
+     146  leite
+     146  molho
+     135  limpador
+     132  bala
+     127  suco
+     126  cápsulas
+     123  espumante
+     122  água
+     115  condicionador
+
+======================================================================
+6. CAIXA ALTA E ACENTUAÇÃO
+======================================================================
+queries 100% MAIÚSCULAS: 6.1%
+queries com acento: 53.1%
+catálogo 100% MAIÚSCULAS: 0.0%
+catálogo com acento: 55.3%
+
+======================================================================
+7. PADRÕES DE EMBALAGEM/ABREVIAÇÃO NAS QUERIES (regex)
+======================================================================
+   C/N (caixa com N, ex C/6)          :   3.6% das queries
+   NxM (ex 12X15)                     :   0.6% das queries
+   UND/UNID/UN                        :   2.1% das queries
+   CX (caixa)                         :   0.4% das queries
+   FD/FARDO                           :   0.2% das queries
+   PCT/PACOTE                         :   0.1% das queries
+   volume ml (350ml, 350 ML)          :  25.0% das queries
+   volume L (1L, 2 L)                 :   5.7% das queries
+   LT/LATA                            :   3.4% das queries
+   peso g/gr (15GR, 500G)             :  53.3% das queries
+   peso kg                            :   4.8% das queries
+   S/ (sem, ex S/ACUCAR)              :   0.1% das queries
+   PET                                :   0.3% das queries
+   garrafa/grf                        :   8.6% das queries
+
+top 30 tokens nas queries:
+     4077  de
+     1943  pacote
+     1409  garrafa
+     1393  unidades
+     1381  com
+     1329  e
+     1274  caixa
+     1234  qualitá
+     1006  500g
+      950  frasco
+      906  750ml
+      857  para
+      768  1
+      759  chocolate
+      708  vinho
+      613  queijo
+      610  400g
+      601  pote
+      599  em
+      597  500ml
+      552  lata
+      551  200g
+      528  300g
+      510  leite
+      497  zero
+      477  1l
+      471  tinto
+      461  100g
+      426  2
+      424  sem
+
+top 30 tokens no catálogo (product_name):
+     4930  de
+     1535  com
+     1121  para
+      953  e
+      892  unidades
+      794  chocolate
+      757  1
+      756  750ml
+      739  em
+      606  sem
+      586  500g
+      583  vinho
+      538  litro
+      474  branco
+      427  zero
+      413  leite
+      403  100g
+      392  queijo
+      382  400g
+      378  litros
+      372  tinto
+      368  200g
+      368  3
+      355  congelado
+      354  2
+      351  300g
+      347  conjunto
+      343  biscoito
+      328  500ml
+      319  10
+
+======================================================================
+8. CASOS DESAFIADORES
+======================================================================
+--- 8a. Queries muito curtas (1-2 palavras) — pouco conteúdo discriminativo:
+   total: 95 (0.6%)
+   'CROC UVA'
+   'CHOKREM PEQUENA'
+   'ZOMO GRANDE'
+   'BATON GAROTO'
+   'KUKETS /CONFETI'
+   'MENTOS PEQUENO'
+   'OVOMALTINE PCT'
+   'MIPIBU JAQUEIRA'
+   'KRO VERMELHA'
+   'PANO MULTIUSO'
+
+--- 8b. Ambiguidade no catálogo: mesmo produto-base em volumes/versões diferentes
+   nomes-base com mais de 1 variação: 966 (2155 produtos envolvidos)
+   maiores grupos de variações (mesmo nome-base):
+     8x  'vela de aniversário número puro glitter rosa festcolor'  ex: ['Vela de aniversário número 4 puro glitter rosa festcolor', 'Vela de aniversário número 3 puro glitter rosa festcolor', 'Vela de aniversário número 2 puro glitter rosa festcolor']
+     7x  'vela de aniversário número puro glitter azul festcolor'  ex: ['Vela de aniversário número 5 puro glitter azul festcolor', 'Vela de aniversário número 9 puro glitter azul festcolor', 'Vela de aniversário número 2 puro glitter azul festcolor']
+     6x  'cartucho para impressora preto hp'  ex: ['Cartucho para impressora preto 670 hp', 'Cartucho para impressora preto 667 hp', 'Cartucho para impressora preto 664 hp']
+     6x  'água mineral sem gás tutti giorni blu'  ex: ['Água mineral sem gás tutti giorni blu 500ml', 'Água mineral sem gás tutti giorni blu 2 litros', 'Água mineral sem gás tutti giorni blu 1,5 litro']
+     6x  'caneca de vidro duplo marchand'  ex: ['Caneca de vidro duplo marchand 250ml', 'Caneca de vidro duplo marchand 160ml', 'Caneca de vidro duplo marchand 380ml']
+     5x  'pote de vidro quadrado multiúso com tampa de bambu marchand'  ex: ['Pote de vidro quadrado multiúso com tampa de bambu marchand 520ml', 'Pote de vidro quadrado multiúso com tampa de bambu marchand 800ml', 'Pote de vidro quadrado multiúso com tampa de bambu marchand 570ml']
+     5x  'pote de vidro retangular hermético com tampa de plástico marchand'  ex: ['Pote de vidro retangular hermético com tampa de plástico marchand 2260ml', 'Pote de vidro retangular hermético com tampa de plástico marchand 370ml', 'Pote de vidro retangular hermético com tampa de plástico marchand 640ml']
+     5x  'pote de vidro redondo multiúso com tampa de bambu marchand'  ex: ['Pote de vidro redondo multiúso com tampa de bambu marchand 250ml', 'Pote de vidro redondo multiúso com tampa de bambu marchand 650ml', 'Pote de vidro redondo multiúso com tampa de bambu marchand 430ml']
+
+--- 8c. Possíveis NO_MATCH: queries cujos tokens quase não aparecem no catálogo
+   queries com ≤1/3 dos tokens no vocabulário do catálogo: 512 (3.1%)
+   'CACHACA COBICADA UMBURANA 250ml C/6'
+   'DORE 250ML C/12 - GUARANA'
+   'PITU LATAO 473ml C/12'
+   'CACHACA COBICADA CRISTAL 900ml'
+   'TRELOSO FLOCOS CX C/36 UNID'
+   'CACHACA GOSTOSA 480ml C/12'
+   'INFINITY 1L C/6'
+   'FREEGELS FRESH MELAO PCT C/12 UNID'
+   'RUSSOV VERMELHA 980ml Und'
+   'MATUTA MACA VERDE GARRAFINHA UNID'
+   'CACHACA TRIUNFO UMBURANA 250ml Und'
+   'CACHACA SAMANAU PRATA 500ml Und'
+
+--- 8d. Exemplos aleatórios de queries (amostra para leitura humana):
+   'Kit Elseve Shampoo 375ml e Condicionador 170ml Reparação Total 5'
+   'Pão de Alho Picante com Queijo Baguete QUALITÁ 300g'
+   'Pote 300ml Colorido Tramontina'
+   'Cogumelo Seco Shimeji MASTROIANI 60g'
+   'Salada Max Mil Green 350g'
+   'Iogurte Integral Grego Morango + Tradicional Batavo Bandeja 510g 6 Unidades'
+   'Multi-Inseticida Aerossol Óleo de Citronela SBP Frasco 380ml Spray Embalagem Econômica'
+   'Feijão Preto Tipo 1 Qualitá Pacote 1kg'
+   'Azeite Português Extra Virgem Intenso Parus 500ml'
+   'Arroz Parboilizado Tipo 1 TIO JOÃO Pacote 1kg'
+   'Saco Lixo Embalixo 30 Litros Repelente com 30 Unidades'
+   'Pizza de Mussarela Seara 440g'
+   'Molho de Pimenta Sweet Chilli Sabores Cepêra Squeeze 270ml'
+   'Mix Nuts Sono 40gr'
+   'Vinho Uruguaio Rose TRAVERSA Garrafa 750ml'

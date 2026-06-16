@@ -1,0 +1,42 @@
+===== TF-IDF char(3,5)/nome: 4 erros de P@1 =====
+query     : Sabonete Líquido Antibacteriano Protex Nutri Protect Vitamina E Sachê 200ml Refil
+  correto : Sabonete líquido protex vitamina e sachê refil 200ml  (rank 4)
+  predito : Sabonete líquido protex antibacteriano nutri protect vitamina e sachê refil 900ml  (score 0.9687)
+
+query     : Manteiga Extra sem Sal Président Gastronomique 200g
+  correto : Manteiga gastronomique sem sal président 200g  (rank 2)
+  predito : Manteiga extra com sal gastronomique président 200g  (score 0.9808)
+
+query     : Pipoca para Microondas Natural com Sal Premium Yoki 90g
+  correto : Pipoca para micro-ondas natural com sal light yoki 90g  (rank 3)
+  predito : Pipoca para micro-ondas premium natural com sal yoki 50g  (score 0.8109)
+
+query     : Manteiga Extra sem Sal Président Gastronomique Pote 200g
+  correto : Manteiga gastronomique sem sal président 200g  (rank 2)
+  predito : Manteiga extra com sal gastronomique président 200g  (score 0.9468)
+
+===== BM25/nome+marca: 6 erros de P@1 =====
+query     : Sabonete Líquido Antibacteriano Protex Nutri Protect Vitamina E Sachê 200ml Refil
+  correto : Sabonete líquido protex vitamina e sachê refil 200ml  (rank 2)
+  predito : Sabonete líquido protex antibacteriano nutri protect vitamina e sachê refil 900ml  (score 41.1279)
+
+query     : Creme Dental Antitártaro Sensodyne Proteção Completa+ Caixa 90g
+  correto : Creme dental sensodyne proteção completa anti-tártaro 90g  (rank 2)
+  predito : Creme dental sensodyne proteção completa+ 90g  (score 34.7379)
+
+query     : Adoçante Líquido Sucralose Linea Caixa 75ml
+  correto : Adoçante líquido sucralose linea 75ml  (rank 2)
+  predito : Adoçante líquido sucralose linea 75ml  (score 34.6349)
+
+query     : Pipoca para Microondas Natural com Sal Premium Yoki 90g
+  correto : Pipoca para micro-ondas natural com sal light yoki 90g  (rank 2)
+  predito : Pipoca para micro-ondas premium natural com sal yoki 50g  (score 23.2866)
+
+query     : Água Tônica ANTARCTICA Zero Açúcar Lata 350ML
+  correto : Água tônica antarctica zero açúcares lata 350ml  (rank 2)
+  predito : Água tônica antarctica lata 350ml  (score 29.9189)
+
+query     : Queijo Brie Ile de France 125g
+  correto : Queijo mini brie ile de france 125g  (rank 2)
+  predito : Queijo brie e azul ile de france 125g  (score 33.0431)
+

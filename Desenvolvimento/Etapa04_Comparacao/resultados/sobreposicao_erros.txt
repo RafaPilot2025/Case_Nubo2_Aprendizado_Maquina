@@ -1,0 +1,38 @@
+ERROS DE P@1 POR SISTEMA (validação, 250 queries)
+
+TF-IDF char: 4 erros
+BM25: 6 erros
+Embeddings E5: 12 erros
+Gemini zero-shot: 8 erros
+Gemini few-shot: 5 erros
+Claude zero-shot: 2 erros
+Claude few-shot: 2 erros
+
+queries erradas por PELO MENOS um sistema: 18
+queries erradas por TODOS os sistemas: 0
+
+ERROS EXCLUSIVOS (só aquele sistema errou):
+
+TF-IDF char: 0 exclusivos
+
+BM25: 2 exclusivos
+   'Adoçante Líquido Sucralose Linea Caixa 75ml'
+   'Água Tônica ANTARCTICA Zero Açúcar Lata 350ML'
+
+Embeddings E5: 5 exclusivos
+   'Lava-Roupas Líquido Lavanda Omo Sachê 900ml Refil'
+   'Molho Shoyu Light SAKURA 150ml'
+   'TANQUERAY GIN 750ML UNID'
+   'Vinho Chileno Tinto Cabernario Cabernet Sauvignon 750ml'
+   'Lava-Roupas Líquido Primavera Tixan Ypê Frasco 3l'
+
+Gemini zero-shot: 0 exclusivos
+
+Gemini few-shot: 1 exclusivos
+   'Manteiga Extra com Sal Président Gastronomique Pote 200g'
+
+Claude zero-shot: 0 exclusivos
+
+Claude few-shot: 0 exclusivos
+
+P@1 de um 'oráculo' que escolhesse o melhor sistema por query: 1.000

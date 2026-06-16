@@ -1,0 +1,153 @@
+========================================================================
+A) EXEMPLOS DE ACERTOS
+========================================================================
+
+--- A1. Queries do perfil 'distribuidor' (maiúsculas/abreviações) acertadas
+--- pelo TF-IDF char em 1º lugar:
+  'VODKA ORLOFF 1L'
+     -> Vodka orloff 1 litro  (score 1.0)
+  'BATATA PRINGLES ORIGINAL 104G'
+     -> Batata pringles original 104g  (score 1.0)
+  'COOKIES BAUDUCCO ORIGINAL 100G'
+     -> Cookies original bauducco 100g  (score 1.0)
+  'BATATA PRINGLES QUEIJO 109G'
+     -> Batata pringles queijo 109g  (score 1.0)
+  'COOKIES BAUDUCCO CHOCOLATE 100G'
+     -> Cookies de chocolate bauducco 100g  (score 1.0)
+  'TANQUERAY GIN 750ML UNID'
+     -> Gin tanqueray ten 750ml  (score 0.9324)
+
+--- A2. Erros do TF-IDF que o Claude CORRIGIU (validação):
+  'Sabonete Líquido Antibacteriano Protex Nutri Protect Vitamina E Sachê 200ml Refil'
+     correto : Sabonete líquido protex vitamina e sachê refil 200ml
+     TF-IDF havia escolhido: Sabonete líquido protex antibacteriano nutri protect vitamina e sachê refil 900ml
+  'Manteiga Extra sem Sal Président Gastronomique 200g'
+     correto : Manteiga gastronomique sem sal président 200g
+     TF-IDF havia escolhido: Manteiga extra com sal gastronomique président 200g
+  'Manteiga Extra sem Sal Président Gastronomique Pote 200g'
+     correto : Manteiga gastronomique sem sal président 200g
+     TF-IDF havia escolhido: Manteiga extra com sal gastronomique président 200g
+
+========================================================================
+B) ERROS CONSOLIDADOS DAS ABORDAGENS FINAIS
+========================================================================
+
+--- TF-IDF char | validação: 4 erros
+  query  : Sabonete Líquido Antibacteriano Protex Nutri Protect Vitamina E Sachê 200ml Refil
+  correto: Sabonete líquido protex vitamina e sachê refil 200ml  (ficou em rank 4)
+  predito: Sabonete líquido protex antibacteriano nutri protect vitamina e sachê refil 900ml
+  query  : Manteiga Extra sem Sal Président Gastronomique 200g
+  correto: Manteiga gastronomique sem sal président 200g  (ficou em rank 2)
+  predito: Manteiga extra com sal gastronomique président 200g
+  query  : Pipoca para Microondas Natural com Sal Premium Yoki 90g
+  correto: Pipoca para micro-ondas natural com sal light yoki 90g  (ficou em rank 3)
+  predito: Pipoca para micro-ondas premium natural com sal yoki 50g
+  query  : Manteiga Extra sem Sal Président Gastronomique Pote 200g
+  correto: Manteiga gastronomique sem sal président 200g  (ficou em rank 2)
+  predito: Manteiga extra com sal gastronomique président 200g
+
+--- TF-IDF char | teste: 2 erros
+  query  : Vinho Argentino Tinto Cordero con Piel de Lobo 750ml
+  correto: Cordero con piel de lobo tinto de tintas argentino vinho tinto 750ml  (ficou em rank 2)
+  predito: Cordero con piel de lobo malbec argentino vinho tinto 750ml
+  query  : Espumante Casa Valduga Arte Tradicional Brut 750ml
+  correto: Espumante brut branco arte tradicional casa valduga 750ml  (ficou em rank 2)
+  predito: Espumante brut rosé arte tradicional casa valduga 750ml
+
+--- Claude few-shot | validação: 2 erros
+  query  : Creme Dental Antitártaro Sensodyne Proteção Completa+ Caixa 90g
+  correto: Creme dental sensodyne proteção completa anti-tártaro 90g  (ficou em rank 2)
+  predito: Creme dental sensodyne proteção completa+ 90g
+  query  : Pipoca para Microondas Natural com Sal Premium Yoki 90g
+  correto: Pipoca para micro-ondas natural com sal light yoki 90g  (ficou em rank 3)
+  predito: Pipoca para micro-ondas natural com sal yoki 100g
+
+--- Claude few-shot | teste: 1 erros
+  query  : Vinho Argentino Tinto Cordero con Piel de Lobo 750ml
+  correto: Cordero con piel de lobo tinto de tintas argentino vinho tinto 750ml  (ficou em rank 2)
+  predito: Cordero con piel de lobo malbec argentino vinho tinto 750ml
+
+========================================================================
+C) CASOS AMBÍGUOS — produtos duplicados/quase-duplicados no catálogo
+========================================================================
+
+--- Manteigas Président (ordem de palavras trocada):
+  [03228022910023] Manteiga sem sal gastronomique président 200g
+  [07891097106040] Manteiga com sal zero lactose gastronomique président 200g
+  [07891097001345] Manteiga gastronomique sem sal président 200g
+  [07891097001338] Manteiga extra com sal gastronomique président 200g
+
+--- Adoçante Linea (nomes idênticos, IDs diferentes):
+  [07896001250710] Adoçante em pó sucralose linea 50 unidades
+  [07896001250628] Adoçante líquido sucralose linea 75ml
+  [07896001250611] Adoçante líquido sucralose linea 75ml
+
+--- Vinhos Sapo de Otro Pozo (malbec × blend):
+  [07798159944339] Sapo de otro pozo blend de tintas argentino vinho tinto 750ml
+  [07798353195407] Sapo de otro pozo fumé blanc argentino vinho branco 750ml
+  [07798353195438] Sapo de otro pozo malbec argentino vinho tinto 750ml
+
+--- Vinhos Cordero con Piel de Lobo (malbec × tinto de tintas):
+  [07798353195575] Cordero con piel de lobo syrah argentino vinho tinto 750ml
+  [07798159948856] Cordero con piel de lobo cabernet sauvignon argentino vinho tinto 750ml
+  [07798353190426] Cordero con piel de lobo malbec argentino vinho rosé 750ml
+  [07798353193588] Cordero con piel de lobo blanco de blancas argentino vinho branco 750ml
+  [07798353195551] Cordero con piel de lobo bonarda argentino vinho tinto 750ml
+  [07798353191522] Cordero con piel de lobo tinto de tintas argentino vinho tinto 750ml
+  [07798353193151] Espumante argentino brut branco cordero con piel de lobo 750ml
+  [07798159947989] Cordero con piel de lobo malbec argentino vinho tinto 750ml
+
+========================================================================
+D) EXPERIMENTO NO_MATCH
+========================================================================
+
+queries de queries.csv com termo de marca fora do vocabulário do catálogo: 6865
+amostra analisada (25):
+  'DEVASSA LITRINHO C/24'  (termos inexistentes no catálogo: ['devassa', 'litrinho'])
+  'INFINITY 250ml C/12'  (termos inexistentes no catálogo: ['infinity'])
+  'Muffim 90g 2 Unidades'  (termos inexistentes no catálogo: ['muffim'])
+  'Queijo Tipo BOURSIN Pesto 140g'  (termos inexistentes no catálogo: ['boursin'])
+  'Vinho Chileno Tinto Seco Gran Reserva Oveja Negra Carménère Valle del Maule Garrafa 750ml'  (termos inexistentes no catálogo: ['oveja', 'maule'])
+  'Shampoo Infantil de Glicerina Pampers Frasco 400ml'  (termos inexistentes no catálogo: ['frasco'])
+  'Manteiga de Primeira Qualidade com Flor de Sal Catupiry Lata 200g'  (termos inexistentes no catálogo: ['qualidade'])
+  'NESTLÉ® PURINA® DOG CHOW® ExtraLife® Ração Úmida para Cães Adultos Minis & Pequenos Salmão 100g'  (termos inexistentes no catálogo: ['extralife'])
+  'Conjunto com 6 Espátulas TRAMONTINA Ipanema'  (termos inexistentes no catálogo: ['espátulas'])
+  'Bebida Láctea UHT Clássico com Café Starbucks Frappuccino Frasco 280ml'  (termos inexistentes no catálogo: ['frasco'])
+  'Biscoito Recheado Oreo Milkshake De Morango Wandinha 90g'  (termos inexistentes no catálogo: ['wandinha'])
+  'Cará Organico 600g'  (termos inexistentes no catálogo: ['organico'])
+  'Vinho Argentino Tinto Santa Julia Orgánica Cabernet 750ml'  (termos inexistentes no catálogo: ['orgánica'])
+  'Panettone Recheio Tiramissu Panco Caixa 550g'  (termos inexistentes no catálogo: ['tiramissu', 'panco'])
+  'Shampoo de Glicerina Johnson's Baby Frasco 400ml'  (termos inexistentes no catálogo: ['frasco'])
+  'Gelato Caramelo com Biscoito Gingerbread Bacio di Latte Casa Pote 490ml'  (termos inexistentes no catálogo: ['gingerbread'])
+  'Couve-Manteiga Qualitá Unidade'  (termos inexistentes no catálogo: ['qualitá'])
+  'Suco Integral Uva Tinto Qualitá Garrafa 1,35l'  (termos inexistentes no catálogo: ['qualitá'])
+  'Bifinho para Cães Churrasco Qualitá Pet Pacote 65g'  (termos inexistentes no catálogo: ['qualitá'])
+  'Queijo Camembert SERRA DAS ANTAS Pedaço 150g'  (termos inexistentes no catálogo: ['antas'])
+  'Presunto San Dan sem Osso CERATI Fatiado 150g'  (termos inexistentes no catálogo: ['cerati'])
+  'Azeite de Oliva Extravirgem Rahma 375ml'  (termos inexistentes no catálogo: ['rahma'])
+  'Condicionador Vult Cabelos Cachos Frasco 325ml'  (termos inexistentes no catálogo: ['frasco'])
+  'Ravioli 4 Queijos Giovanni Rana 250g'  (termos inexistentes no catálogo: ['giovanni'])
+  'Lombo Canadense Qualitá Fatiado Fino Solto 180g'  (termos inexistentes no catálogo: ['qualitá', 'solto'])
+
+--- D1. Abordagem clássica (TF-IDF): score do 1º colocado
+  queries COM match (validação, n=250): mediana=0.959 p5=0.886 min=0.781
+  candidatas NO_MATCH (n=25)          : mediana=0.537 max=0.956
+  limiar no percentil 5 da validação (0.886):
+    NO_MATCH detectadas (score abaixo do limiar): 23/25
+    falso alarme na validação: 5.2%
+  exemplos do que o clássico retorna para NO_MATCH (sempre retorna algo!):
+    'DEVASSA LITRINHO C/24' -> Sementes microverdes de alface deva isla 2g (score 0.191)
+    'INFINITY 250ml C/12' -> Secante finish abrilhantador 250ml (score 0.176)
+    'Muffim 90g 2 Unidades' -> Muffin de chocolate orgânico suavipan 40g (score 0.338)
+    'Queijo Tipo BOURSIN Pesto 140g' -> Queijo tipo brie vigor 120g (score 0.299)
+
+--- D2. LLM (Claude) com instrução de abstenção
+  NO_MATCH (n=25): abstenções corretas = 13/25 (52%)
+   casos em que mesmo assim escolheu um produto:
+    'Muffim 90g 2 Unidades' -> Biscoito recheado de chocolate oreo 3 unidades 90g embalagem promocional
+    'Shampoo Infantil de Glicerina Pampers Frasco 400ml' -> Shampoo de glicerina pampers 400ml
+    'NESTLÉ® PURINA® DOG CHOW® ExtraLife® Ração Úmida para Cães Adultos Minis & Pequenos Salmão 100g' -> Ração úmida para cães dog chow purina adultos carne sachê 100g
+    'Conjunto com 6 Espátulas TRAMONTINA Ipanema' -> Conjunto de espatula inox laguna 66906/241 tramontina 6 peças
+    'Bebida Láctea UHT Clássico com Café Starbucks Frappuccino Frasco 280ml' -> Bebida láctea com café classico frappuccino starbucks 280ml
+    'Biscoito Recheado Oreo Milkshake De Morango Wandinha 90g' -> Biscoito recheado milkshake de morango oreo 90g
+  CONTROLE com match (n=25): abstenções indevidas = 0/25 (0%) | acertos em 1º = 24/25

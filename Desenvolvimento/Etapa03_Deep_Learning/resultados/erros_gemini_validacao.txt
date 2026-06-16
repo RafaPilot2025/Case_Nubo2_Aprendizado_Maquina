@@ -1,0 +1,61 @@
+===== Gemini zero-shot: 8 erros de P@1 =====
+query     : Manteiga Extra sem Sal Président Gastronomique 200g [TAMBEM ERRO DO TF-IDF]
+  correto : Manteiga gastronomique sem sal président 200g  (rank 2)
+  predito : Manteiga sem sal gastronomique président 200g
+
+query     : Leite UHT Desnatado Zero Lactose Zymil PARMALAT 1 Litro
+  correto : Leite uht desnatado zero lactose zymil parmalat 1 litro 12 un  (rank 2)
+  predito : Leite uht semidesnatado zero lactose zymil parmalat 1 litro
+
+query     : Creme Dental Antitártaro Sensodyne Proteção Completa+ Caixa 90g
+  correto : Creme dental sensodyne proteção completa anti-tártaro 90g  (rank 2)
+  predito : Creme dental sensodyne proteção completa+ 90g
+
+query     : Leite UHT Desnatado Parmalat Garrafa 1 Litro
+  correto : Leite uht desnatado parmalat garrafa 1 litro 6 un  (rank 2)
+  predito : Leite uht semidesnatado parmalat garrafa 1 litro
+
+query     : Pipoca para Microondas Natural com Sal Premium Yoki 90g [TAMBEM ERRO DO TF-IDF]
+  correto : Pipoca para micro-ondas natural com sal light yoki 90g  (rank 3)
+  predito : Pipoca para micro-ondas natural com sal yoki 100g
+
+query     : Ração Úmida Whiskas Sachê Carne ao Molho para Gatos Adultos 85g
+  correto : Ração úmida para gatos whiskas adultos castrados carne ao molho sachê 85g  (rank 2)
+  predito : Ração úmida para gatos whiskas carne ao molho 1+ anos sachê 85g
+
+query     : Manteiga Extra sem Sal Président Gastronomique Pote 200g [TAMBEM ERRO DO TF-IDF]
+  correto : Manteiga gastronomique sem sal président 200g  (rank 2)
+  predito : Manteiga sem sal gastronomique président 200g
+
+query     : Vinho Argentino Tinto SAPO DE OTRO POZO 750ml
+  correto : Sapo de otro pozo malbec argentino vinho tinto 750ml  (rank 2)
+  predito : Sapo de otro pozo blend de tintas argentino vinho tinto 750ml
+
+erros do TF-IDF que o zero-shot CORRIGIU: 1/4
+   + Sabonete Líquido Antibacteriano Protex Nutri Protect Vitamina E Sachê 200ml Refil
+
+===== Gemini few-shot: 5 erros de P@1 =====
+query     : Manteiga Extra com Sal Président Gastronomique Pote 200g
+  correto : Manteiga extra com sal gastronomique président 200g  (rank 2)
+  predito : Manteiga extra com sal président 200g
+
+query     : Manteiga Extra sem Sal Président Gastronomique 200g [TAMBEM ERRO DO TF-IDF]
+  correto : Manteiga gastronomique sem sal président 200g  (rank 2)
+  predito : Manteiga sem sal gastronomique président 200g
+
+query     : Ração Úmida Whiskas Sachê Carne ao Molho para Gatos Adultos 85g
+  correto : Ração úmida para gatos whiskas adultos castrados carne ao molho sachê 85g  (rank 2)
+  predito : Ração úmida para gatos whiskas carne ao molho 1+ anos sachê 85g
+
+query     : Manteiga Extra sem Sal Président Gastronomique Pote 200g [TAMBEM ERRO DO TF-IDF]
+  correto : Manteiga gastronomique sem sal président 200g  (rank 2)
+  predito : Manteiga sem sal gastronomique président 200g
+
+query     : Vinho Argentino Tinto SAPO DE OTRO POZO 750ml
+  correto : Sapo de otro pozo malbec argentino vinho tinto 750ml  (rank 2)
+  predito : Sapo de otro pozo blend de tintas argentino vinho tinto 750ml
+
+erros do TF-IDF que o few-shot CORRIGIU: 2/4
+   + Sabonete Líquido Antibacteriano Protex Nutri Protect Vitamina E Sachê 200ml Refil
+   + Pipoca para Microondas Natural com Sal Premium Yoki 90g
+

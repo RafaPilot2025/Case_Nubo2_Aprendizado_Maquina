@@ -1,0 +1,3 @@
+Gemini (gemini-2.5-flash-lite) zero-shot reranking top-10 (filtro TF-IDF char, lotes de 32)
+P@1=0.9680  MRR@5=0.9833  R@5=1.0000
+tempo total 250 queries: 1.8 min | fallbacks de parse: 0

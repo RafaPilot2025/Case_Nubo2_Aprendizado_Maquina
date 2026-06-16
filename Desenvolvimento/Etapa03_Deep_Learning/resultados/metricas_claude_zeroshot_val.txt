@@ -1,0 +1,3 @@
+Claude (claude-haiku-4-5) zero-shot reranking top-10 (filtro TF-IDF char) — conjunto: val
+P@1=0.9920  MRR@5=0.9953  R@5=1.0000
+tempo total 250 queries: 18.5 min | fallbacks: 0

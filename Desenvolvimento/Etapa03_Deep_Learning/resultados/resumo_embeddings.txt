@@ -1,0 +1,9 @@
+EMBEDDINGS SEMÂNTICOS — VALIDAÇÃO (250 queries, catálogo 14.206)
+
+               modelo          texto   P@1    MRR@5   R@5  t_indexação(s)  t_250queries(s)
+E5-small-multilingual pré-processado 0.952 0.973667 1.000            55.9             1.35
+  MiniLM-multilingual pré-processado 0.912 0.940467 0.984            56.4             0.90
+E5-small-multilingual            cru 0.912 0.947667 0.996            62.9             1.56
+  MiniLM-multilingual            cru 0.516 0.585000 0.692            59.6             1.20
+
+Campeão: E5-small-multilingual / texto pré-processado

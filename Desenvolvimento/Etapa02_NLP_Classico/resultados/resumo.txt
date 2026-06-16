@@ -1,0 +1,14 @@
+RESULTADOS NA VALIDAÇÃO (250 queries, catálogo de 14.206 produtos)
+
+              método  documento   P@1    MRR@5  R@5  t_indexação(s)  t_250queries(s)
+   TF-IDF char (3,5)       nome 0.984 0.990333  1.0            1.20             0.09
+   TF-IDF char (3,5) nome+marca 0.980 0.988333  1.0            1.22             0.09
+                BM25 nome+marca 0.976 0.988000  1.0            0.06             4.56
+                BM25       nome 0.976 0.988000  1.0            0.06             4.42
+TF-IDF palavra (1,1) nome+marca 0.964 0.980667  1.0            0.12             0.03
+TF-IDF palavra (1,1)       nome 0.964 0.980667  1.0            0.13             0.03
+TF-IDF palavra (1,2)       nome 0.960 0.977467  1.0            0.33             0.03
+TF-IDF palavra (1,2) nome+marca 0.960 0.977467  1.0            0.32             0.03
+
+Melhor TF-IDF: TF-IDF char (3,5) / nome
+Melhor BM25  : BM25 / nome+marca
