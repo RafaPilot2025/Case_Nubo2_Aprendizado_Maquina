@@ -4,7 +4,7 @@ T2: MATCHING DE PRODUTOS — Aprendizado de Maquina (Prof. Otavio Parraga)
 INTEGRANTES
 -----------
 - Rafael Magalhaes      — matricula: 25180166
-- Pedro Martini Lehn    — matricula: 
+- Pedro Martini Lehn    — matricula: 22280113
 
 ESTRUTURA DO PROJETO
 --------------------
@@ -17,8 +17,7 @@ Desenvolvimento/
   Etapa04_Comparacao/                comparacao_abordagens.py + resultados/
   Etapa05_Avaliacao_Final/           avaliacao_final_locais.py + resultados/ (metricas no teste)
   Etapa06_Analise_Qualitativa/       analise_qualitativa.py + resultados/ (inclui experimento NO_MATCH)
-  Etapa07_Relatorio_e_Apresentacao/  RELATORIO.md/.pdf, APRESENTACAO.pptx, geradores
-Cada pasta de etapa contem tambem um EXPLICACAO_ETAPA*.md com a explicacao didatica.
+  Etapa07_Relatorio_e_Apresentacao/  RELATORIO.md, RELATORIO.pdf
 
 INSTALACAO (Windows, Python 3.12+)
 ----------------------------------
@@ -34,7 +33,7 @@ INSTALACAO (Windows, Python 3.12+)
 
    As chaves sao lidas do ambiente; nenhuma chave fica no codigo.
    Abra um NOVO terminal apos o setx. Custo estimado para reproduzir a
-   parte Claude (validacao + teste + NO_MATCH): ~US$ 0,90.
+   parte Claude (validacao + teste + NO_MATCH): ~US$ 0,85 em creditos.
 
 REPRODUCAO DOS RESULTADOS (ordem)
 ---------------------------------
@@ -52,10 +51,6 @@ REPRODUCAO DOS RESULTADOS (ordem)
   Opcional (experimento historico com a API gratuita do Gemini):
   python Etapa03_Deep_Learning\rerank_gemini.py zero|few       (requer GEMINI_API_KEY; sujeito
                                                                 a cota de 20 req/dia por modelo)
-
-  Para regerar o relatorio PDF e a apresentacao:
-  python Etapa07_Relatorio_e_Apresentacao\gerar_pdf.py
-  python Etapa07_Relatorio_e_Apresentacao\gerar_apresentacao.py
 
 OBSERVACOES
 -----------

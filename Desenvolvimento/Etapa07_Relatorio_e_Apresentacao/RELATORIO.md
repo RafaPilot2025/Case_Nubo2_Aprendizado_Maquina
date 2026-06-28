@@ -2,7 +2,7 @@
 
 **Disciplina:** Aprendizado de Máquina
 **Professor:** Otavio Parraga
-**Integrantes:** Rafael Magalhaes [MATRÍCULA] e Pedro Martini Lehn [MATRÍCULA]
+**Integrantes:** Rafael Magalhaes (25180166) e Pedro Martini Lehn (22280113)
 **Data:** Junho de 2026
 
 **Resumo.** Este trabalho constrói e compara pipelines automáticos de matching de produtos para o problema real da Nubo Desenvolvimento de Software: dado um pedido de compra escrito livremente (ex.: "COCA COLA 1L C/6"), identificar o produto correspondente em um catálogo normalizado de 14.206 itens. Implementamos a abordagem clássica de recuperação de informação (TF-IDF e BM25) e duas estratégias de deep learning (embeddings semânticos e LLM como reranker), avaliadas por P@1, MRR@5 e R@5. No conjunto de teste, a abordagem clássica atingiu P@1 = 99,2% e a abordagem com LLM, P@1 = 99,6%, com os erros remanescentes explicados por ambiguidades do próprio catálogo.
@@ -168,7 +168,5 @@ A principal foi a **infraestrutura gratuita de LLMs em 2026**: cotas de 20 requi
 ## 6. Referências
 
 MANNING, C. D.; RAGHAVAN, P.; SCHUTZE, H. Introduction to Information Retrieval. Cambridge: Cambridge University Press, 2008.
-
-
 
 Documentação técnica: scikit-learn (TfidfVectorizer), rank-bm25, Sentence-Transformers, Google Gemini API, Anthropic Claude API.
