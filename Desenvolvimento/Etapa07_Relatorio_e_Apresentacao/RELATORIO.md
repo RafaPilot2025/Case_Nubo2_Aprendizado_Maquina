@@ -15,9 +15,9 @@ O matching de produtos é um caso clássico de **recuperação de informação**
 
 ### 1.2 TF-IDF
 
-O **TF-IDF** (*Term Frequency — Inverse Document Frequency*) atribui a cada termo de um documento um peso que combina duas intuições: termos frequentes no documento o descrevem bem (TF), e termos raros na coleção como um todo são mais informativos (IDF) (SPARCK JONES, 1972; SALTON; BUCKLEY, 1988). Em termos econômicos, é o princípio da escassez aplicado a palavras: "garrafa" aparece em milhares de produtos e vale pouco para distinguir um deles; "gastronomique" aparece em pouquíssimos e vale muito. Cada texto vira um vetor esparso com um peso por termo do vocabulário.
+O **TF-IDF** (*Term Frequency — Inverse Document Frequency*) atribui a cada termo de um documento um peso que combina duas intuições: termos frequentes no documento o descrevem bem (TF), e termos raros na coleção como um todo são mais informativos (IDF). Em termos econômicos, é o princípio da escassez aplicado a palavras: "garrafa" aparece em milhares de produtos e vale pouco para distinguir um deles; "gastronomique" aparece em pouquíssimos e vale muito. Cada texto vira um vetor esparso com um peso por termo do vocabulário.
 
-Neste trabalho usamos também TF-IDF sobre **n-gramas de caracteres** (sequências de 3 a 5 letras), técnica que torna a comparação robusta a erros de grafia e flexões — "açúcar" e "açúcares" compartilham quase todos os fragmentos (CAVNAR; TRENKLE, 1994).
+Neste trabalho usamos também TF-IDF sobre **n-gramas de caracteres** (sequências de 3 a 5 letras), técnica que torna a comparação robusta a erros de grafia e flexões — "açúcar" e "açúcares" compartilham quase todos os fragmentos.
 
 ### 1.3 Similaridade de cosseno
 
@@ -25,15 +25,15 @@ Com os textos representados como vetores, a **similaridade de cosseno** mede o c
 
 ### 1.4 BM25
 
-O **BM25** é uma função de ranqueamento probabilística, padrão em motores de busca como Lucene e Elasticsearch (ROBERTSON; ZARAGOZA, 2009). Refina o TF-IDF com duas ideias: **saturação de frequência** — a segunda ocorrência de um termo no documento contribui menos que a primeira, exatamente como utilidade marginal decrescente — e **normalização pelo tamanho do documento**, evitando que textos longos ganhem vantagem indevida.
+O **BM25** é uma função de ranqueamento probabilística, padrão em motores de busca como Lucene e Elasticsearch. Refina o TF-IDF com duas ideias: **saturação de frequência** — a segunda ocorrência de um termo no documento contribui menos que a primeira, exatamente como utilidade marginal decrescente — e **normalização pelo tamanho do documento**, evitando que textos longos ganhem vantagem indevida.
 
 ### 1.5 Embeddings semânticos
 
-Um **embedding** é uma representação densa de um texto: um vetor de algumas centenas de números reais que captura seu significado, aprendido por uma rede neural treinada em grandes volumes de texto (MIKOLOV et al., 2013). Textos com sentidos próximos ficam próximos no espaço vetorial mesmo sem palavras em comum. Para o estudante de economia, a analogia natural é a teoria do consumidor de Lancaster (LANCASTER, 1966): um produto não é seu nome, mas um pacote de características — o embedding posiciona cada produto num espaço de características aprendidas automaticamente. Usamos modelos da família **Sentence-Transformers**, treinados especificamente para que a similaridade de cosseno entre embeddings de frases reflita similaridade semântica (REIMERS; GUREVYCH, 2019), incluindo o **E5 multilíngue**, otimizado para tarefas de busca (WANG et al., 2022).
+Um **embedding** é uma representação densa de um texto: um vetor de algumas centenas de números reais que captura seu significado, aprendido por uma rede neural treinada em grandes volumes de texto. Textos com sentidos próximos ficam próximos no espaço vetorial mesmo sem palavras em comum. Para o estudante de economia, a analogia natural é a teoria do consumidor de Lancaster: um produto não é seu nome, mas um pacote de características — o embedding posiciona cada produto num espaço de características aprendidas automaticamente. Usamos modelos da família **Sentence-Transformers**, treinados especificamente para que a similaridade de cosseno entre embeddings de frases reflita similaridade semântica, incluindo o **E5 multilíngue**, otimizado para tarefas de busca.
 
 ### 1.6 LLMs e aprendizado em contexto
 
-**Grandes modelos de linguagem** (LLMs), baseados na arquitetura Transformer (VASWANI et al., 2017), são capazes de **aprendizado em contexto**: executam tarefas novas a partir de instruções em linguagem natural, sem nenhum exemplo (**zero-shot**) ou com poucos exemplos resolvidos incluídos no prompt (**few-shot**) (BROWN et al., 2020). Neste trabalho, o LLM atua como **reranker**: recebe a query e uma lista curta de candidatos pré-filtrados e decide o ranking final — combinando a eficiência da busca clássica com a capacidade de raciocínio do modelo.
+**Grandes modelos de linguagem** (LLMs), baseados na arquitetura Transformer, são capazes de **aprendizado em contexto**: executam tarefas novas a partir de instruções em linguagem natural, sem nenhum exemplo (**zero-shot**) ou com poucos exemplos resolvidos incluídos no prompt (**few-shot**). Neste trabalho, o LLM atua como **reranker**: recebe a query e uma lista curta de candidatos pré-filtrados e decide o ranking final — combinando a eficiência da busca clássica com a capacidade de raciocínio do modelo.
 
 ### 1.7 Métricas de avaliação
 
