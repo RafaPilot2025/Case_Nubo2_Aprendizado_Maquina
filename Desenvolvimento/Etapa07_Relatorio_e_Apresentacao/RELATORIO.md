@@ -4,6 +4,7 @@
 **Professor:** Otavio Parraga
 **Integrantes:** Rafael Magalhaes (25180166) e Pedro Martini Lehn (22280113)
 **Data:** Junho de 2026
+**Repositório:** https://github.com/RafaPilot2025/Case_Nubo2_Aprendizado_Maquina.git
 
 **Resumo.** Este trabalho constrói e compara pipelines automáticos de matching de produtos para o problema real da Nubo Desenvolvimento de Software: dado um pedido de compra escrito livremente (ex.: "COCA COLA 1L C/6"), identificar o produto correspondente em um catálogo normalizado de 14.206 itens. Implementamos a abordagem clássica de recuperação de informação (TF-IDF e BM25) e duas estratégias de deep learning (embeddings semânticos e LLM como reranker), avaliadas por P@1, MRR@5 e R@5. No conjunto de teste, a abordagem clássica atingiu P@1 = 99,2% e a abordagem com LLM, P@1 = 99,6%, com os erros remanescentes explicados por ambiguidades do próprio catálogo.
 
@@ -15,7 +16,7 @@ O matching de produtos é um caso clássico de **recuperação de informação**
 
 ### 1.2 TF-IDF
 
-O **TF-IDF** (*Term Frequency, Inverse Document Frequency*) atribui a cada termo de um documento um peso que combina duas intuições: termos frequentes no documento o descrevem bem (TF), e termos raros na coleção como um todo são mais informativos (IDF). Em termos econômicos, é o princípio da escassez aplicado a palavras: "garrafa" aparece em milhares de produtos e vale pouco para distinguir um deles; "gastronomique" aparece em pouquíssimos e vale muito. Cada texto vira um vetor esparso com um peso por termo do vocabulário.
+O **TF-IDF** (*Term Frequency, Inverse Document Frequency*) atribui a cada termo de um documento um peso que combina duas intuições: termos frequentes no documento o descrevem bem (TF), e termos raros na coleção como um todo são mais informativos (IDF). É o princípio da escassez aplicado a palavras: "garrafa" aparece em milhares de produtos e vale pouco para distinguir um deles; "gastronomique" aparece em pouquíssimos e vale muito. Cada texto vira um vetor esparso com um peso por termo do vocabulário.
 
 Neste trabalho usamos também TF-IDF sobre **n-gramas de caracteres** (sequências de 3 a 5 letras), técnica que torna a comparação robusta a erros de grafia e flexões ("açúcar" e "açúcares" compartilham quase todos os fragmentos).
 
@@ -29,7 +30,7 @@ O **BM25** é uma função de ranqueamento probabilística, padrão em motores d
 
 ### 1.5 Embeddings semânticos
 
-Um **embedding** é uma representação densa de um texto: um vetor de algumas centenas de números reais que captura seu significado, aprendido por uma rede neural treinada em grandes volumes de texto. Textos com sentidos próximos ficam próximos no espaço vetorial mesmo sem palavras em comum. Para o estudante de economia, a analogia natural é a teoria do consumidor de Lancaster: um produto não é seu nome, mas um pacote de características; o embedding posiciona cada produto num espaço de características aprendidas automaticamente. Usamos modelos da família **Sentence-Transformers**, treinados especificamente para que a similaridade de cosseno entre embeddings de frases reflita similaridade semântica, incluindo o **E5 multilíngue**, otimizado para tarefas de busca.
+Um **embedding** é uma representação densa de um texto: um vetor de algumas centenas de números reais que captura seu significado, aprendido por uma rede neural treinada em grandes volumes de texto. Textos com sentidos próximos ficam próximos no espaço vetorial mesmo sem palavras em comum. Usamos modelos da família **Sentence-Transformers**, treinados especificamente para que a similaridade de cosseno entre embeddings de frases reflita similaridade semântica, incluindo o **E5 multilíngue**, otimizado para tarefas de busca.
 
 ### 1.6 LLMs e aprendizado em contexto
 
@@ -53,14 +54,13 @@ Um **embedding** é uma representação densa de um texto: um vetor de algumas c
 
 Nenhum trecho de código foi copiado de repositórios de terceiros além do uso convencional dessas bibliotecas.
 
-**Implementado pelo grupo:**
+**Implementado:**
 
 - Módulo de pré-processamento textual com as regras derivadas da exploração dos dados (`comum/preprocessamento.py`);
 - Script de avaliação com as três métricas exigidas (`comum/avaliacao.py`);
 - Pipelines completos das duas abordagens, incluindo a busca em grade de variações na validação (Etapas 2 e 3);
 - Pipeline híbrido LLM-reranker (filtro top-10 + prompts zero/few-shot + saída estruturada em JSON Schema), com sistema de checkpoint retomável e tratamento de limites de API;
-- Análises comparativas (por tipo de query, sobreposição de erros, oráculo) e o experimento NO_MATCH com grupo de controle;
-- Todos os experimentos, gráficos e este relatório.
+- Análises comparativas (por tipo de query, sobreposição de erros, oráculo) e o experimento NO_MATCH com grupo de controle.
 
 ## 3. Metodologia
 
@@ -79,23 +79,23 @@ A exploração inicial (Etapa 1) revelou dois perfis de query, a maioria "limpa"
 
 ### 3.2 Pré-processamento
 
-Aplicado igualmente a queries e nomes de catálogo: minúsculas; remoção de acentos e pontuação; remoção de termos de embalagem do pedido (C/6, C/12, UND, CX, FD, PCT), que descrevem o pedido e não o produto; padronização de unidades coladas ao número (1 litro -> 1l; 15 GR -> 15g), preservando volumes e pesos por serem discriminativos entre variações; conversão de "S/" em "sem"; remoção de stopwords leves. **Divergência justificada do enunciado:** mantivemos "com" e "sem" no vocabulário; removê-las tornaria "água com gás" e "água sem gás" idênticas.
+Aplicado igualmente a queries e nomes de catálogo: minúsculas; remoção de acentos e pontuação; remoção de termos de embalagem do pedido (C/6, C/12, UND, CX, FD, PCT), que descrevem o pedido e não o produto; padronização de unidades coladas ao número (1 litro -> 1l; 15 GR -> 15g), preservando volumes e pesos por serem discriminativos entre variações; conversão de "S/" em "sem"; remoção de stopwords leves. Mantivemos "com" e "sem" no vocabulário; removê-las tornaria "água com gás" e "água sem gás" idênticas.
 
 ### 3.3 Abordagem 1 (NLP clássico)
 
-Para cada query, o pipeline calcula a similaridade com os 14.206 produtos e retorna o top-5 com pontuações. Testamos na validação 8 variações: {TF-IDF palavra (1,1); TF-IDF palavra (1,2); TF-IDF caracteres (3,5); BM25} x {indexar só o nome; nome + marca}. Configuração campeã (congelada): **TF-IDF de caracteres (3,5), indexando apenas o nome**.
+Para cada query, o pipeline calcula a similaridade com os 14.206 produtos e retorna o top-5 com pontuações. Testamos na validação 8 variações: {TF-IDF palavra (1,1); TF-IDF palavra (1,2); TF-IDF caracteres (3,5); BM25} x {indexar só o nome; nome + marca}. Configuração melhor: **TF-IDF de caracteres (3,5), indexando apenas o nome**.
 
 ### 3.4 Abordagem 2 (Deep Learning)
 
-**Estratégia A (Embeddings):** geramos embeddings do catálogo e das queries com dois modelos multilíngues (MiniLM e E5-small), em texto cru e pré-processado (4 variações), ranqueando por cosseno. Campeã: E5-small com texto pré-processado.
+**Estratégia A (Embeddings):** geramos embeddings do catálogo e das queries com dois modelos multilíngues (MiniLM e E5-small), em texto cru e pré-processado (4 variações), ranqueando por cosseno. Melhor: E5-small com texto pré-processado.
 
-**Estratégia B, LLM como reranker (modelo final da abordagem):** pipeline híbrido recomendado no enunciado, o TF-IDF campeão filtra os 10 candidatos mais prováveis (com R@5 = 100% na validação, o correto quase sempre está entre eles) e o LLM decide o ranking final, em modo zero-shot e few-shot (3 exemplos do próprio enunciado, sem contaminar a validação).
+**Estratégia B, LLM como reranker (modelo final da abordagem):** o TF-IDF foi melhor, filtrando os 10 candidatos mais prováveis (com R@5 = 100% na validação, o correto quase sempre está entre eles) e o LLM decide o ranking final, em modo zero-shot e few-shot (3 exemplos do próprio enunciado, sem contaminar a validação).
 
-Iniciamos com a API gratuita do Google Gemini, como sugerido. Em junho de 2026, porém, o nível gratuito limita cada modelo a **20 requisições/dia**, o que forçou processamento em lotes de 32 queries por chamada, e o modelo estável apresentou indisponibilidade crônica (erros 503) por dois dias seguidos. Concluímos a validação no `gemini-2.5-flash-lite` e, em seguida, **migramos a estratégia para a API paga da Anthropic** (`claude-haiku-4-5`, custo total de aproximadamente US$ 0,85 em créditos), que permitiu o desenho mais limpo: uma chamada por query e **saída estruturada com JSON Schema** (formato de resposta garantido pela API). Por consistência, validação e teste da configuração final usaram o mesmo modelo. Configuração congelada: **Claude Haiku 4.5, few-shot, reranking dos top-10 do TF-IDF**.
+Iniciamos com a API gratuita do Google Gemini, como sugerido. Em junho de 2026, porém, o nível gratuito limita cada modelo a **20 requisições/dia**, o que forçou processamento em lotes de 32 queries por chamada, e o modelo estável apresentou indisponibilidade crônica (erros 503) por dois dias seguidos. Concluímos a validação no `gemini-2.5-flash-lite` e, em seguida, **migramos a estratégia para a API paga da Anthropic** (`claude-haiku-4-5`, custo total de aproximadamente US$ 0,85 em créditos), que permitiu o desenho mais limpo: uma chamada por query e **saída estruturada com JSON Schema** (formato de resposta garantido pela API). Por consistência, validação e teste da configuração final usaram o mesmo modelo. Configuração: **Claude Haiku 4.5, few-shot, reranking dos top-10 do TF-IDF**.
 
 ### 3.5 Medições
 
-Além das métricas de qualidade, medimos tempo de execução para as 250 queries e custo monetário de cada sistema, dimensões exigidas na tabela comparativa.
+Além das métricas de qualidade, medimos tempo de execução para as 250 queries e custo monetário de cada sistema.
 
 ## 4. Resultados e Análise
 
@@ -115,14 +115,14 @@ Observações: (i) todos os sistemas retornam lista top-5 ranqueada, então P@1,
 
 ### 4.2 Teste (250 queries), métricas finais
 
-| Abordagem                           | P@1   | MRR@5 | R@5   | Tempo (250 q) | Custo           | Complexidade |
-| ----------------------------------- | ----- | ----- | ----- | ------------- | --------------- | ------------ |
-| 2, Deep Learning (Claude few-shot)  | 99,6% | 0,998 | 100%  | 12,7 min      | ~US$ 0,30/250 q | Média-Alta   |
-| 1, TF-IDF / BM25 (TF-IDF char)      | 99,2% | 0,996 | 100%  | 1,4 s         | gratuito        | Baixa        |
-| (referência) BM25                   | 98,8% | 0,992 | 100%  | 4,7 s         | gratuito        | Baixa        |
-| (referência) Embeddings E5          | 98,4% | 0,989 | 99,6% | 65,5 s        | gratuito        | Média        |
+| Abordagem                          | P@1   | MRR@5 | R@5   | Tempo (250 q) | Custo           | Complexidade |
+| ---------------------------------- | ----- | ----- | ----- | ------------- | --------------- | ------------ |
+| 2, Deep Learning (Claude few-shot) | 99,6% | 0,998 | 100%  | 12,7 min      | ~US$ 0,30/250 q | Média-Alta   |
+| 1, TF-IDF / BM25 (TF-IDF char)     | 99,2% | 0,996 | 100%  | 1,4 s         | gratuito        | Baixa        |
+| (referência) BM25                  | 98,8% | 0,992 | 100%  | 4,7 s         | gratuito        | Baixa        |
+| (referência) Embeddings E5         | 98,4% | 0,989 | 99,6% | 65,5 s        | gratuito        | Média        |
 
-Todos os sistemas foram iguais ou melhores no teste do que na validação, nenhum sinal de sobreajuste do protocolo de seleção. Com n = 250, diferenças de ~1 p.p. estão dentro do ruído estatístico.
+Todos os sistemas foram iguais ou melhores no teste do que na validação, nenhum sinal de sobreajuste do protocolo de seleção.
 
 ### 4.3 Em quais queries cada abordagem se sai melhor
 
@@ -132,15 +132,15 @@ Por segmento (validação): embeddings lideravam sozinhos nas queries longas (10
 
 **Acertos.** O caso de uso central é resolvido com folga pelos dois finalistas: "VODKA ORLOFF 1L" -> "Vodka orloff 1 litro"; "TANQUERAY GIN 750ML UNID" -> "Gin tanqueray ten 750ml" (abreviações descartadas, unidades casadas, ordem de palavras irrelevante).
 
-**Erros (duas categorias).** (1) *Variação fina que exige raciocínio*, onde o LLM corrige o clássico: o TF-IDF respondeu o sabonete de 900ml para a query "... Sachê 200ml Refil" e a manteiga "extra com sal" para a query "Extra sem Sal"; o Claude acertou ambos priorizando volume e o par com/sem. (2) *Ambiguidade dos dados*, que nenhum sistema resolve: a query "Pipoca ... Premium 90g" não tem variante exata no catálogo (há premium 50g, light 90g e natural 100g); a query do creme dental mistura os nomes de duas variantes reais do produto; o único erro do Claude no teste foi um vinho cuja query diz apenas "Tinto" para uma vinícola com cinco tintos no catálogo.
+**Erros (duas categorias).** (1) *Variação fina que exige raciocínio*, onde o LLM corrige o clássico: o TF-IDF respondeu o sabonete de 900ml para a query "... Sachê 200ml Refil" e a manteiga "extra com sal" para a query "Extra sem Sal"; o Claude acertou ambos priorizando volume e o par com/sem. (2) *Ambiguidade dos dados*, que nenhum sistema resolveu: a query "Pipoca ... Premium 90g" não tem variante exata no catálogo (há premium 50g, light 90g e natural 100g); a query do creme dental mistura os nomes de duas variantes reais do produto; o único erro do Claude no teste foi um vinho cuja query diz apenas "Tinto" para uma vinícola com cinco tintos no catálogo.
 
 **Casos ambíguos do catálogo.** Documentamos duplicatas verdadeiras: dois cadastros de "Adoçante líquido sucralose linea 75ml" com nomes idênticos e IDs distintos; manteigas Président com as mesmas palavras em ordem trocada; oito vinhos "Cordero con Piel de Lobo". Essas duplicatas estabelecem o teto de ~99%; os erros remanescentes são dos dados, não dos modelos.
 
-**Casos NO_MATCH.** Selecionamos de queries.csv 25 queries cujo termo de marca não existe no catálogo (ex.: "DEVASSA LITRINHO C/24"). A abordagem clássica nunca se recusa a responder (retorna o mais parecido, mesmo absurdo), mas seu score a denuncia: mediana 0,54 nos NO_MATCH contra 0,96 nas queries com correspondência; um limiar no percentil 5 da validação detecta 23/25 com 5% de falso alarme. O LLM, instruído a poder abster-se, absteve-se em 52% dos casos com **zero abstenção indevida** num grupo de controle de 25 queries com correspondência (e 24/25 de acerto nele). Inspecionando os casos sem abstenção, constatamos que a maioria era falha da nossa heurística de rotulagem; eram produtos que existiam no catálogo e o modelo os encontrou corretamente (ex.: o shampoo Pampers). Conclusão dupla: o desempenho real de detecção é maior que os números brutos, e rotular NO_MATCH automaticamente é, por si só, um problema difícil.
+**Casos NO_MATCH.** Selecionamos de queries.csv 25 queries cujo termo de marca não existe no catálogo (ex.: "DEVASSA LITRINHO C/24"). A abordagem clássica nunca se recusa a responder (retorna o mais parecido, mesmo absurdo), mas o score denuncia: mediana 0,54 nos NO_MATCH contra 0,96 nas queries com correspondência; um limiar no percentil 5 da validação detecta 23/25 com 5% de falso alarme. O LLM, instruído a poder abster-se, absteve-se em 52% dos casos com **zero abstenção indevida** num grupo de controle de 25 queries com correspondência (e 24/25 de acerto nele). Inspecionando os casos sem abstenção, constatamos que a maioria era falha da heurística de rotulagem; eram produtos que existiam no catálogo e o modelo os encontrou corretamente (ex.: o shampoo Pampers). O desempenho real de detecção é maior que os números brutos, e rotular NO_MATCH automaticamente é, por si só, um problema difícil.
 
 ### 4.5 Tradeoff simplicidade x desempenho
 
-A resposta tem dois capítulos. **Contra o LLM gratuito, a simplicidade vence:** o Gemini gratuito (98,0%) perdeu para o TF-IDF (98,4%) sendo ~90x mais lento, limitado a 20 requisições/dia e sujeito a indisponibilidade crônica. **Contra o LLM pago, o desempenho tem preço conhecido:** o Claude comprou +0,8 p.p. na validação e +0,4 p.p. no teste por ~US$ 0,30 a cada 250 queries; no volume real da Nubo (milhares de pedidos/dia), cerca de US$ 19/dia, contra custo zero do clássico, que é ~600x mais rápido e mantém os dados na máquina. A tarefa é majoritariamente de casamento lexical fino, terreno do clássico; o LLM agrega valor na cauda de casos que exigem raciocínio (volumes implícitos, pares com/sem, abstenção em NO_MATCH).
+A resposta tem dois capítulos. **Contra o LLM gratuito, a simplicidade vence:** o Gemini gratuito (98,0%) perdeu para o TF-IDF (98,4%) sendo 90x mais lento, limitado a 20 requisições/dia e sujeito a indisponibilidade crônica. **Contra o LLM pago, o desempenho tem preço:** o Claude comprou +0,8 p.p. na validação e +0,4 p.p. no teste por ~US$ 0,30 a cada 250 queries; no volume real da Nubo (milhares de pedidos/dia), cerca de US$ 19/dia, contra custo zero do clássico, que é ~600x mais rápido e mantém os dados na máquina. A tarefa é majoritariamente de casamento lexical fino, terreno do clássico; o LLM agrega valor na cauda de casos que exigem raciocínio (volumes implícitos, pares com/sem, abstenção em NO_MATCH).
 
 ## 5. Conclusão, Melhorias e Dificuldades
 
